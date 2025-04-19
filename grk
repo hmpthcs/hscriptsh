@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# Name: grk 
+# Does what: 
+#   Opens a tabbed container in sway with each tab a separate alacritty instance: 
+#   One runs gurk, the runs yazi, opened at the gurk local files directory
+#
+## This really should be handled by one of the many proper libraries for interacting with sway-ipc
+## The script below works, but is really more for understanding
+
+swaymsg "focus parent;layout splith" ;
+sleep 0.5s ;
+swaymsg exec 'alacritty --class "gurk-msgs"' ;
+sleep 0.5s ; \
+wtype "gurk" -P Return -p Return ; \
+swaymsg '[app_id="gurk-msgs"] focus' ; \
+sleep 0.5s ; \
+swaymsg "split toggle" ; \
+sleep 0.5s ; \
+swaymsg exec 'alacritty --working-directory="${HOME}/.local/share/gurk/files" --class "gurk-files"' ; \
+sleep 0.5s ; \
+wtype "yazi" -P Return -p Return ; \
+swaymsg "layout tabbed" ; \
+swaymsg "focus prev"; \
+sleep 0.5s ; \
+swaymsg 'focus parent; \
+mark --add "GURK-meta"'
+
+exit
